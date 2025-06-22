@@ -48,22 +48,53 @@ Automatický systém pro stahování, zpracování a přepis hlášení rozhlasu
 
 ## 🚀 Nasazení na produkci
 
-### Použití deploy.sh scriptu:
+### Kompletní postup nasazení na Raspberry Pi 5:
+
+#### 1. Příprava lokálního prostředí:
 ```bash
-# Na Raspberry Pi 5:
+# Zkopíruj demo deploy script a vyplň API klíče
+cp deploy-demo.sh deploy.sh
+nano deploy.sh  # Vyplň PROD_GEMINI_API_KEY, PROD_WEB_API_KEY, PROD_WEB_API_ENDPOINT
+```
+
+#### 2. Nahrání na Raspberry Pi:
+```bash
+# Nahrání celého projektu na Pi
+scp -r . michal1609@10.0.0.27:/home/michal1609/myapps/BroadcastAnnouncements
+```
+
+#### 3. Spuštění deploy scriptu:
+```bash
+# Připojení a spuštění
+ssh michal1609@10.0.0.27
+cd /home/michal1609/myapps/BroadcastAnnouncements
+chmod +x deploy.sh
 ./deploy.sh
 ```
 
-### Co deploy.sh dělá:
-1. Instaluje systémové závislosti (python3-venv, ffmpeg)
-2. Vytváří produkční `.env` soubor s produkčními API klíči
-3. Nastavuje Python virtuální prostředí a instaluje requirements.txt
-4. Konfiguruje CRON úlohu (každých 5 minut)
-5. Spustí testovací běh pro ověření funkčnosti
+### Co deploy.sh automaticky dělá:
+1. **Systémové závislosti**: Instaluje `python3-venv`, `ffmpeg`
+2. **Environment**: Vytváří produkční `.env` soubor s API klíči
+3. **Python prostředí**: Nastavuje virtuální prostředí `.venv` a instaluje dependencies
+4. **CRON úloha**: Konfiguruje automatické spouštění každých 5 minut
+5. **Test**: Spustí aplikaci jednou pro ověření funkčnosti
 
 ### CRON konfigurace:
 ```bash
-*/5 * * * * cd /path/to/project && .venv/bin/python main.py >> cron.log 2>&1
+*/5 * * * * cd /home/michal1609/myapps/BroadcastAnnouncements && /home/michal1609/myapps/BroadcastAnnouncements/.venv/bin/python /home/michal1609/myapps/BroadcastAnnouncements/main.py >> cron.log 2>&1 # BroadcastAnnouncements Cron Job
+```
+
+### Monitoring produkce:
+```bash
+# Kontrola CRON úlohy
+crontab -l
+
+# Sledování logů
+tail -f /home/michal1609/myapps/BroadcastAnnouncements/cron.log
+
+# Kontrola stavu
+cd /home/michal1609/myapps/BroadcastAnnouncements
+cat last_processed.txt
 ```
 
 ## 🔧 Technické detaily
@@ -147,5 +178,42 @@ BroadcastAnnouncements/
 - ✅ Kompatibilita s Python 3.13
 - ✅ Robustní error handling a logování
 - ✅ SSL konfigurace pro test i produkci
+- ✅ **BEZPEČNOST**: Všechny API klíče odstraněny z kódu, používají se environment variables
+- ✅ **GIT REPOZITÁŘ**: Projekt nahrán na GitHub s bezpečnou konfigurací
+- ✅ **PRODUKČNÍ NASAZENÍ**: Úspěšně nasazeno na Raspberry Pi 5 (22.6.2025)
 
-**Poslední úspěšný test**: 22.6.2025 - zpracováno 5 hlášení s novým audioUrl parametrem 
+**Poslední úspěšné nasazení**: 22.6.2025 - projekt bezpečně nahrán na GitHub a nasazen na produkci
+
+## 🔒 Bezpečnostní postupy pro Git a nasazení
+
+### Před nahráním na Git:
+1. ✅ **Odstranění API klíčů**: Všechny citlivé údaje odstraněny z kódu
+2. ✅ **Environment variables**: Používání `.env` souborů (v `.gitignore`)
+3. ✅ **Deploy scripty**: Produkční `deploy.sh` s klíči v `.gitignore`, demo verze `deploy-demo.sh` v Git
+4. ✅ **Dokumentace**: `.env.example` jako šablona, `README.md` s bezpečnostními pokyny
+
+### Postup pro nové nasazení:
+```bash
+# 1. Klonování z Git
+git clone https://github.com/Michal1609/BroadcastAnnouncements.git
+cd BroadcastAnnouncements
+
+# 2. Příprava konfigurace
+cp .env.example .env
+nano .env  # Vyplň API klíče
+
+# 3. Příprava deploy scriptu
+cp deploy-demo.sh deploy.sh
+nano deploy.sh  # Vyplň produkční API klíče
+
+# 4. Nasazení na produkci
+scp -r . user@server:/path/to/app
+ssh user@server "cd /path/to/app && chmod +x deploy.sh && ./deploy.sh"
+```
+
+### Kontrolní checklist před commitem:
+- [ ] Žádné API klíče v kódu
+- [ ] `.env` soubory v `.gitignore`
+- [ ] Produkční `deploy.sh` v `.gitignore`
+- [ ] Aktualizovaná dokumentace
+- [ ] Funkční demo verze souborů 

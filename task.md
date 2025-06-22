@@ -46,3 +46,14 @@ Tento soubor sleduje postup vývoje.
 - [x] Oprava SSL problémů pro lokální vývoj s self-signed certifikáty.
 - [x] Úspěšné otestování kompletního procesu - zpracováno 5 hlášení s novým parametrem `audioUrl`.
 
+## Fáze 6: Bezpečnost a Git repozitář [DOKONČENO]
+
+- [x] Odstranění všech API klíčů z kódu a dokumentace.
+- [x] Bezpečné nastavení environment variables přes `.env` soubory.
+- [x] Vytvoření `.env.example` jako šablony pro konfiguraci.
+- [x] Rozdělení `deploy.sh` na demo verzi (pro Git) a produkční (lokální s klíči).
+- [x] Vytvoření kompletní dokumentace v `README.md` s bezpečnostními pokyny.
+- [x] Úspěšné nahrání projektu na GitHub: https://github.com/Michal1609/BroadcastAnnouncements.git
+- [x] Úspěšné nasazení aktualizované verze na Raspberry Pi 5 v produkčním prostředí.
+- [x] Ověření funkčnosti CRON úlohy (každých 5 minut) na produkci.
+
