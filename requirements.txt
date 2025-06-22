@@ -1,0 +1,5 @@
+requests
+beautifulsoup4
+pydub
+google-generativeai
+python-dotenv 
