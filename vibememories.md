@@ -181,8 +181,10 @@ BroadcastAnnouncements/
 - ✅ **BEZPEČNOST**: Všechny API klíče odstraněny z kódu, používají se environment variables
 - ✅ **GIT REPOZITÁŘ**: Projekt nahrán na GitHub s bezpečnou konfigurací
 - ✅ **PRODUKČNÍ NASAZENÍ**: Úspěšně nasazeno na Raspberry Pi 5 (22.6.2025)
+- ✅ **OPRAVA VÍCE HLÁŠENÍ**: Systém nyní správně zpracovává všechna hlášení za den (25.6.2025)
+- ✅ **ROZŠÍŘENÁ DETEKCE**: Podporuje hlášení s i bez .ogg přípony, ignoruje XML soubory
 
-**Poslední úspěšné nasazení**: 22.6.2025 - projekt bezpečně nahrán na GitHub a nasazen na produkci
+**Poslední aktualizace**: 25.6.2025 - opravena detekce více hlášení za den a různých formátů souborů
 
 ## 🔒 Bezpečnostní postupy pro Git a nasazení
 

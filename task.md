@@ -57,3 +57,31 @@ Tento soubor sleduje postup vývoje.
 - [x] Úspěšné nasazení aktualizované verze na Raspberry Pi 5 v produkčním prostředí.
 - [x] Ověření funkčnosti CRON úlohy (každých 5 minut) na produkci.
 
+## Fáze 7: Oprava detekce více hlášení za den [DOKONČENO] ✅
+
+**Problém**: Systém ignoroval další hlášení za den a některá hlášení bez .ogg přípony.
+- Původní logika spoléhala na chronologické pořadí v seznamu URL  
+- Scraper detekoval pouze soubory s .ogg příponou
+- Při více hlášeních za den se zpracovalo jen první
+
+**Implementované řešení**:
+- [x] ✅ Změněn `state_manager.py` - místo ukládání posledního souboru ukládá **sadu všech zpracovaných URL**
+- [x] ✅ Aktualizován `main.py` - místo hledání indexu porovnává URL přímo proti seznamu zpracovaných
+- [x] ✅ Přidána funkce pro mazání starých záznamů (starších než 30 dní)
+- [x] ✅ Zachována zpětná kompatibilita s existujícím `last_processed.txt`
+- [x] ✅ Opraven `scraper.py` - detekuje hlášení s i bez .ogg přípony (vynechává XML soubory)
+
+**Technické úpravy realizované**:
+- [x] ✅ `state_manager.py`: Nové funkce `get_processed_urls()`, `save_processed_url()`, `cleanup_old_urls()`
+- [x] ✅ `main.py`: Změna logiky - `new_urls = [url for url in all_urls if url not in processed_urls]`
+- [x] ✅ `scraper.py`: Rozšířena detekce - `is_ogg_file or is_announcement_file`
+- [x] ✅ Migrace ze starého formátu na nový JSON formát
+- [x] ✅ Unit testy pro novou logiku
+
+**Testování dokončeno**:
+- [x] ✅ Simulována situace s více hlášeními za den (25.6.1, 25.6.2, 25.6.3, 25.6)
+- [x] ✅ Ověřena zpětná kompatibilita s `last_processed.txt`
+- [x] ✅ Otestováno na Windows prostředí - vše funguje správně
+
+**Výsledek**: Systém nyní správně zpracovává všechna hlášení za den, včetně různých formátů souborů.
+

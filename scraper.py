@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import logging
+import os
 
 from config import BROADCAST_URL
 
@@ -25,18 +26,16 @@ def fetch_announcements():
     soup = BeautifulSoup(response.content, 'html.parser')
     
     links = []
-    # Najdeme všechny <a> tagy, které mají atribut 'href'
     for link_tag in soup.find_all('a', href=True):
         href = link_tag['href']
-        # Filtrujeme pouze odkazy na .ogg soubory
-        if href.endswith('.ogg'):
-            # Sestavíme kompletní URL. Předpokládáme, že relativní cesta je vždy 'rozhlas/...'
-            if href.startswith('rozhlas/'):
-                 full_url = f"https://rozhlas.milesovice.cz/{href}"
-                 links.append(full_url)
-            else:
-                # Pro případ, že by se objevila jiná struktura cesty
-                logging.warning(f"Nalezen neočekávaný formát odkazu: {href}")
+        if not href.startswith('rozhlas/Hlášení'):
+            continue
+        if href.endswith('.xml'):
+            continue
+        print(f"DEBUG: href={href}")
+        full_url = f"https://rozhlas.milesovice.cz/{href}"
+        links.append(full_url)
+        logging.debug(f"Nalezen audio soubor: {href}")
 
     # Stránka řadí soubory od nejnovějšího, ale my je chceme zpracovávat od nejstaršího
     # proto seznam otočíme.
