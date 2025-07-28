@@ -144,3 +144,4 @@ last_processed.txt
 
 # Deployment scripts with sensitive data
 deploy.sh 
+/.vs

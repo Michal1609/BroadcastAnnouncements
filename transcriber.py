@@ -51,7 +51,7 @@ def transcribe_audio(mp3_path: str) -> str | None:
         logging.info(f"Soubor úspěšně nahrán: {audio_file.uri}")
 
         # Vytvoření instance modelu a odeslání požadavku na přepis
-        model = genai.GenerativeModel('models/gemini-1.5-flash')
+        model = genai.GenerativeModel('models/gemini-2.5-flash')
         prompt = "prosím, proved přesný přepis tohoto audio souboru, děkuji"
         
         response = model.generate_content([prompt, audio_file])
